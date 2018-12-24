@@ -3,9 +3,8 @@
 include __DIR__ . '/vendor/autoload.php';
 
 use Rubix\ML\Other\Loggers\Screen;
-use Rubix\ML\Clusterers\FuzzyCMeans;
 use Rubix\ML\Datasets\Generators\Blob;
-use Rubix\ML\Kernels\Distance\Euclidean;
+use Rubix\ML\Clusterers\GaussianMixture;
 use Rubix\ML\Datasets\Generators\Agglomerate;
 use Rubix\ML\CrossValidation\Reports\ContingencyTable;
 use League\Csv\Writer;
@@ -15,18 +14,18 @@ const REPORT_FILE = 'report.json';
 
 echo '╔═══════════════════════════════════════════════════════════════╗' . PHP_EOL;
 echo '║                                                               ║' . PHP_EOL;
-echo '║ Color Clusterer using Fuzzy C Means                           ║' . PHP_EOL;
+echo '║ Color Clusterer using Gaussian Mixture                        ║' . PHP_EOL;
 echo '║                                                               ║' . PHP_EOL;
 echo '╚═══════════════════════════════════════════════════════════════╝' . PHP_EOL;
 echo PHP_EOL;
 
 $generator = new Agglomerate([
-    'white' => new Blob([255, 255, 255], 20.),
     'red' => new Blob([255, 0, 0], 20.),
     'orange' => new Blob([255, 128, 0], 20.),
     'yellow' => new Blob([255, 255, 0], 20.),
     'green' => new Blob([0, 128, 0], 20.),
     'blue' => new Blob([0, 0, 255], 20.),
+    'aqua' => new Blob([0, 255, 255], 20.),
     'purple' => new Blob([128, 0, 255], 20.),
     'pink' => new Blob([255, 0, 255], 20.),
     'magenta' => new Blob([255, 0, 128], 20.),
@@ -36,7 +35,7 @@ $generator = new Agglomerate([
 $training = $generator->generate(3000)->randomize();
 $testing = $generator->generate(1000)->randomize();
 
-$estimator = new FuzzyCMeans(10, 3.0, new Euclidean());
+$estimator = new GaussianMixture(10);
 
 $estimator->setLogger(new Screen('colors'));
 

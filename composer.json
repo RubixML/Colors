@@ -1,12 +1,12 @@
 {
     "name": "rubix/colors",
     "type": "project",
-    "description": "An example project demonstrating unsupervised learning with the Fuzzy C Means clusterer and synthetic color data generation.",
+    "description": "An example project demonstrating unsupervised learning with the Gaussian Mixture clusterer and synthetic color data generation.",
     "homepage": "https://github.com/RubixML/Colors",
     "license": "MIT",
     "keywords": [
         "php", "machine", "learning", "data", "science", "mining", "predictive", "modeling",
-        "ai", "clustering", "synthetic", "fuzzy-c-means", "contingency-table", "fcm"
+        "ai", "clustering", "synthetic", "gaussian-mixture", "contingency-table", "gmm"
     ],
     "authors": [
         {
@@ -19,7 +19,7 @@
     "require": {
         "php": ">=7.1.3",
         "league/csv": "^9.1",
-        "rubix/ml": "^0.0.7-alpha"
+        "rubix/ml": "dev-master"
     },
     "config": {
         "preferred-install": "dist",
