@@ -1,6 +1,6 @@
 # Color Clusterer
 
-An *unsupervised* learning problem that involves clustering similar shades of 10 different base colors generated on the fly using Rubix [Generators](https://github.com/RubixML/RubixML#generators). The idea is to generate a training and testing set full of synthetic data that we'll later use to train and test a [Gaussian Mixture](https://github.com/RubixML/RubixML#gaussian-mixture) clusterer. In this tutorial, you'll learn the concepts of unsupervised clustering and synthetic data generation.
+An *unsupervised* learning problem that involves clustering similar shades of 10 different base colors generated on the fly using Rubix [Generators](https://github.com/RubixML/RubixML#generators). The objective is to generate a training and testing set full of synthetic data that we'll later use to train and test a [Gaussian Mixture](https://github.com/RubixML/RubixML#gaussian-mixture) clusterer. In this tutorial, you'll learn the concepts of unsupervised clustering and synthetic data generation.
 
 - **Difficulty**: Easy
 - **Training time**: Short
@@ -90,7 +90,6 @@ Here is an example of a cluster that contains a misclustered magenta point with 
 
 ```json
 {
-    ...
     "8": {
         "red": 100,
         "orange": 0,
@@ -103,7 +102,6 @@ Here is an example of a cluster that contains a misclustered magenta point with 
         "magenta": 1,
         "black": 0
     },
-    ...
 }
 ```
 
