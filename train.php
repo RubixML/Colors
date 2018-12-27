@@ -45,3 +45,5 @@ $report = new ContingencyTable();
 $results = $report->generate($predictions, $testing->labels());
 
 file_put_contents(REPORT_FILE, json_encode($results, JSON_PRETTY_PRINT));
+
+echo 'Report saved to ' . REPORT_FILE . PHP_EOL;
