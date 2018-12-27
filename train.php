@@ -7,9 +7,7 @@ use Rubix\ML\Datasets\Generators\Blob;
 use Rubix\ML\Clusterers\GaussianMixture;
 use Rubix\ML\Datasets\Generators\Agglomerate;
 use Rubix\ML\CrossValidation\Reports\ContingencyTable;
-use League\Csv\Writer;
 
-const PROGRESS_FILE = 'progress.csv';
 const REPORT_FILE = 'report.json';
 
 echo '╔═══════════════════════════════════════════════════════════════╗' . PHP_EOL;
@@ -32,8 +30,7 @@ $generator = new Agglomerate([
     'black' => new Blob([0, 0, 0], 20.),
 ]);
 
-$training = $generator->generate(3000)->randomize();
-$testing = $generator->generate(1000)->randomize();
+list($training, $testing) = $generator->generate(5000)->stratifiedSplit(0.8);
 
 $estimator = new GaussianMixture(10);
 
@@ -41,13 +38,9 @@ $estimator->setLogger(new Screen('colors'));
 
 $estimator->train($training);
 
-$writer = Writer::createFromPath(PROGRESS_FILE, 'w+');
-$writer->insertOne(['loss']);
-$writer->insertAll(array_map(null, $estimator->steps(), []));
+$predictions = $estimator->predict($testing);
 
 $report = new ContingencyTable();
-
-$predictions = $estimator->predict($testing);
 
 $results = $report->generate($predictions, $testing->labels());
 
