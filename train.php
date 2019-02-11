@@ -30,7 +30,7 @@ $generator = new Agglomerate([
     'black' => new Blob([0, 0, 0], 20.),
 ]);
 
-list($training, $testing) = $generator->generate(5000)->stratifiedSplit(0.8);
+[$training, $testing] = $generator->generate(5000)->stratifiedSplit(0.8);
 
 $estimator = new GaussianMixture(10);
 
