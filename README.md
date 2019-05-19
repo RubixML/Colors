@@ -3,17 +3,17 @@
 An *unsupervised* learning problem that involves clustering similar shades of 10 different base colors generated on the fly using Rubix [Generators](https://github.com/RubixML/RubixML#generators). The objective is to generate a training and testing set full of synthetic data that we'll later use to train and test a [Gaussian Mixture](https://github.com/RubixML/RubixML#gaussian-mixture) clusterer. In this tutorial, you'll learn the concepts of unsupervised clustering and synthetic data generation.
 
 - **Difficulty**: Easy
-- **Training time**: Short
+- **Training time**: < 1 Minute
 - **Memory needed**: < 1G
 
 ## Installation
 
-Clone the repository locally:
+Clone the repository locally using [Git](https://git-scm.com/):
 ```sh
 $ git clone https://github.com/RubixML/Colors
 ```
 
-Install dependencies:
+Install dependencies using [Composer](https://getcomposer.org/):
 ```sh
 $ composer install
 ```
@@ -26,7 +26,7 @@ In machine learning, synthetic data are used to either test an estimator or to a
 
 > **Note**: Generators can generate both labeled and unlabeled datasets. The type of Dataset object returned depends on the generator. See the [API Reference](https://github.com/RubixML/RubixML#generators) for more details.
 
-> **Note**: The code for this tutorial can be found in `train.php`.
+> The source code can be found in the [train.php](https://github.com/RubixML/Colors/blob/master/train.php) file in project root.
 
 ```php
 use Rubix\ML\Datasets\Generators\Agglomerate;
@@ -49,7 +49,7 @@ $generator = new Agglomerate([
 To generate a dataset, call `generate()` with the number of samples (*n*). A Dataset object is returned which allows you to fluently process the data further by *stratifying* and splitting the dataset into a training and testing set. Stratifying the dataset before splitting creates balanced training and testing sets by label. The proportion of samples in the *left* (training) set to the *right* (testing) set is given by the *ratio* parameter to the `stratifiedSplit()` method. Let's choose to generate a set of 5000 samples and then split it 80/20 (4000 for training and 1000 for testing).
 
 ```php
-list($training, $testing) = $generator->generate(5000)->stratifiedSplit(0.8);
+[$training, $testing] = $generator->generate(5000)->stratifiedSplit(0.8);
 ```
 
 Let's take a look at the data we've just generated using plotting software such as [Plotly](https://plot.ly/). We've used the label to color the data such that each point is represented by its base color.
@@ -82,8 +82,6 @@ $predictions = $estimator->predict($testing);
 $report = new ContingencyTable();
 
 $results = $report->generate($predictions, $testing->labels());
-
-file_put_contents(REPORT_FILE, json_encode($results, JSON_PRETTY_PRINT));
 ```
 
 Here is an example of a cluster that contains a misclustered magenta point with the reds.
