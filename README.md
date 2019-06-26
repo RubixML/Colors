@@ -1,6 +1,6 @@
 # Color Clusterer
 
-An *unsupervised* learning problem that involves clustering similar shades of 10 different base colors generated on the fly using Rubix [Generators](https://github.com/RubixML/RubixML#generators). The objective is to generate a training and testing set full of synthetic data that we'll later use to train and test a [Gaussian Mixture](https://github.com/RubixML/RubixML#gaussian-mixture) clusterer. In this tutorial, you'll learn the concepts of unsupervised clustering and synthetic data generation.
+An *unsupervised* learning problem that involves clustering similar shades of 10 different base colors generated on the fly using Rubix [Generators](https://docs.rubixml.com/en/latest/datasets/generators/api.html). The objective is to generate a training and testing set full of synthetic data that we'll later use to train and test a [Gaussian Mixture](https://docs.rubixml.com/en/latest/clusterers/gaussian-mixture.html) clusterer. In this tutorial, you'll learn the concepts of unsupervised clustering and synthetic data generation.
 
 - **Difficulty**: Easy
 - **Training time**: < 1 Minute
@@ -22,9 +22,9 @@ $ composer install
 - [PHP](https://php.net) 7.1.3 or above
 
 ## Tutorial
-In machine learning, synthetic data are used to either test an estimator or to augment a small dataset with more training data. Rubix provides a number of [Generators](https://github.com/RubixML/RubixML#generators) which output a dataset in a particular shape and dimensionality. For this example project, we are going to generate [Blobs](https://github.com/RubixML/RubixML#blob) of colors using their RGB values as features. We'll form an [Aglomerate](https://github.com/RubixML/RubixML#agglomerate) of color Blobs and give each one a label corresponding to its base color name.
+In machine learning, synthetic data are used to either test an estimator or to augment a small dataset with more training data. Rubix provides a number of [Generators](https://docs.rubixml.com/en/latest/datasets/generators/api.html) which output a dataset in a particular shape and dimensionality. For this example project, we are going to generate [Blobs](https://docs.rubixml.com/en/latest/datasets/generators/blob.html) of colors using their RGB values as features. We'll form an [Aglomerate](https://docs.rubixml.com/en/latest/datasets/generators/agglomerate.html) of color Blobs and give each one a label corresponding to its base color name.
 
-> **Note**: Generators can generate both labeled and unlabeled datasets. The type of Dataset object returned depends on the generator. See the [API Reference](https://github.com/RubixML/RubixML#generators) for more details.
+> **Note**: Generators can generate both labeled and unlabeled datasets. The type of Dataset object returned depends on the generator. See the [API Reference](https://docs.rubixml.com/en/latest/datasets/generators/api.html) for more details.
 
 > The source code can be found in the [train.php](https://github.com/RubixML/Colors/blob/master/train.php) file in project root.
 
@@ -56,7 +56,7 @@ Let's take a look at the data we've just generated using plotting software such 
 
 ![Synthetic Color Data](https://github.com/RubixML/Colors/blob/master/docs/images/samples-3d.png)
 
-Now we'll define our [Gaussian Mixture](https://github.com/RubixML/RubixML#gaussian-mixture) clusterer. Gaussian Mixture Models (*GMMs*) are a type of probabilistic model for finding subpopulations within a dataset. They place a Gaussian *component* over each target cluster that allows a *likelihood* function to be computed. The learner is then trained with Expectation Maximization (*EM*) to maximize the likelihood that the area over each Gaussian component contains only samples of the same class. To set the target number of clusters *k* we need to set the *hyper-parameters* of the GMM. Since we already know the number of different labeled color Blobs in our dataset we'll choose a value of 10.
+Now we'll define our [Gaussian Mixture](https://docs.rubixml.com/en/latest/clusterers/gaussian-mixture.html) clusterer. Gaussian Mixture Models (*GMMs*) are a type of probabilistic model for finding subpopulations within a dataset. They place a Gaussian *component* over each target cluster that allows a *likelihood* function to be computed. The learner is then trained with Expectation Maximization (*EM*) to maximize the likelihood that the area over each Gaussian component contains only samples of the same class. To set the target number of clusters *k* we need to set the *hyper-parameters* of the GMM. Since we already know the number of different labeled color Blobs in our dataset we'll choose a value of 10.
 
 ```php
 use Rubix\ML\Clusterers\GaussianMixture;
@@ -70,7 +70,7 @@ Once our estimator is instantiated we can call `train()` passing in the training
 $estimator->train($training);
 ```
 
-Lastly to test the model, let's create a report that compares the clustering to some ground truth given by the labels we've assigned to each Blob. A [Contingency Table](https://github.com/RubixML/RubixML#contingency-table) is a clustering report similar to a [Confusion Matrix](https://github.com/RubixML/RubixML#confusion-matrix). It counts the number of times a particular label was assigned to a cluster. A good clustering will show that each cluster contains samples with roughly the same label.
+Lastly to test the model, let's create a report that compares the clustering to some ground truth given by the labels we've assigned to each Blob. A [Contingency Table](https://docs.rubixml.com/en/latest/cross-validation/reports/contingency-table.html) is a clustering report similar to a [Confusion Matrix](https://docs.rubixml.com/en/latest/cross-validation/reports/confusion-matrix.html). It counts the number of times a particular label was assigned to a cluster. A good clustering will show that each cluster contains samples with roughly the same label.
 
 We'll need the predictions made by the Gaussian Mixture clusterer as well as the labels from the testing set to pass to the Contingency Table report's `generate()` method. Once that's done, we'll save the output to a JSON file so we can review it later.
 
