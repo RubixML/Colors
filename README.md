@@ -1,13 +1,11 @@
 # Color Clusterer
-
-An *unsupervised* learning problem that involves clustering similar shades of 10 different base colors generated on the fly using Rubix [Generators](https://docs.rubixml.com/en/latest/datasets/generators/api.html). The objective is to generate a training and testing set full of synthetic data that we'll later use to train and test a [Gaussian Mixture](https://docs.rubixml.com/en/latest/clusterers/gaussian-mixture.html) clusterer. In this tutorial, you'll learn the concepts of unsupervised clustering and synthetic data generation.
+An unsupervised learning problem that involves clustering 10 different base colors generated on the fly using Rubix ML [Generators](https://docs.rubixml.com/en/latest/datasets/generators/api.html). Our objective is to generate a synthetic training and testing set that we'll use to train and test a [Gaussian Mixture](https://docs.rubixml.com/en/latest/clusterers/gaussian-mixture.html) clusterer.
 
 - **Difficulty**: Easy
 - **Training time**: < 1 Minute
 - **Memory needed**: < 1G
 
 ## Installation
-
 Clone the repository locally using [Git](https://git-scm.com/):
 ```sh
 $ git clone https://github.com/RubixML/Colors
@@ -22,11 +20,14 @@ $ composer install
 - [PHP](https://php.net) 7.1.3 or above
 
 ## Tutorial
-In machine learning, synthetic data are used to either test an estimator or to augment a small dataset with more training data. Rubix provides a number of [Generators](https://docs.rubixml.com/en/latest/datasets/generators/api.html) which output a dataset in a particular shape and dimensionality. For this example project, we are going to generate [Blobs](https://docs.rubixml.com/en/latest/datasets/generators/blob.html) of colors using their RGB values as features. We'll form an [Aglomerate](https://docs.rubixml.com/en/latest/datasets/generators/agglomerate.html) of color Blobs and give each one a label corresponding to its base color name.
 
-> **Note**: Generators can generate both labeled and unlabeled datasets. The type of Dataset object returned depends on the generator. See the [API Reference](https://docs.rubixml.com/en/latest/datasets/generators/api.html) for more details.
+### Introduction
+In machine learning, synthetic data are often used to test an estimator and to augment a small dataset with more training data. In this tutorial we'll use synthetic data to train and test a Gaussian Mixture Model (GMM) to determine the color of a sample.
 
-> The source code can be found in the [train.php](https://github.com/RubixML/Colors/blob/master/train.php) file in project root.
+> **Note:** The source code for this example can be found in the [train.php](https://github.com/RubixML/Colors/blob/master/train.php) file in project root.
+
+### Generating the Data
+Rubix ML provides a number of [Generators](https://docs.rubixml.com/en/latest/datasets/generators/api.html) which can output a dataset in a particular shape and dimensionality. For this example project, we are going to generate [Blobs](https://docs.rubixml.com/en/latest/datasets/generators/blob.html) of colors using their red, green, and blue (RGB) values as the features. The [Agglomerate](https://docs.rubixml.com/en/latest/datasets/generators/agglomerate.html) generator will combine and label the individual color generators to form a dataset consisting of all 10 colors.
 
 ```php
 use Rubix\ML\Datasets\Generators\Agglomerate;
@@ -46,17 +47,18 @@ $generator = new Agglomerate([
 ]);
 ```
 
-To generate a dataset, call `generate()` with the number of samples (*n*). A Dataset object is returned which allows you to fluently process the data further by *stratifying* and splitting the dataset into a training and testing set. Stratifying the dataset before splitting creates balanced training and testing sets by label. The proportion of samples in the *left* (training) set to the *right* (testing) set is given by the *ratio* parameter to the `stratifiedSplit()` method. Let's choose to generate a set of 5000 samples and then split it 80/20 (4000 for training and 1000 for testing).
+To generate the dataset, simply call `generate()` with the number of samples (*n*) to be generated. A [Dataset](https://docs.rubixml.com/en/latest/datasets/generators/api.html) object is returned which allows you to fluently process the data further if needed. For example we could stratify and split the dataset into a training and testing set such that each color is represented fairly in each set. The proportion of samples in the *left* (training) set to the *right* (testing) set is given by the *ratio* parameter to the `stratifiedSplit()` method. For this example, we'll choose to generate a set of 5,000 samples and then split it 80/20 (4000 for training and 1000 for testing).
 
 ```php
 [$training, $testing] = $generator->generate(5000)->stratifiedSplit(0.8);
 ```
 
-Let's take a look at the data we've just generated using plotting software such as [Plotly](https://plot.ly/). We've used the label to color the data such that each point is represented by its base color.
+Now let's take a look at the data we've generated using some plotting software such as [Plotly](https://plot.ly).
 
 ![Synthetic Color Data](https://github.com/RubixML/Colors/blob/master/docs/images/samples-3d.png)
 
-Now we'll define our [Gaussian Mixture](https://docs.rubixml.com/en/latest/clusterers/gaussian-mixture.html) clusterer. Gaussian Mixture Models (*GMMs*) are a type of probabilistic model for finding subpopulations within a dataset. They place a Gaussian *component* over each target cluster that allows a *likelihood* function to be computed. The learner is then trained with Expectation Maximization (*EM*) to maximize the likelihood that the area over each Gaussian component contains only samples of the same class. To set the target number of clusters *k* we need to set the *hyper-parameters* of the GMM. Since we already know the number of different labeled color Blobs in our dataset we'll choose a value of 10.
+### Instantiating the Learner
+Next we'll define our [Gaussian Mixture](https://docs.rubixml.com/en/latest/clusterers/gaussian-mixture.html) clusterer. Gaussian Mixture Models (GMMs) are a type of probabilistic model for finding subpopulations within a dataset. GMM places a Gaussian *component* over each target cluster that allows a likelihood function to be computed. The learner is then trained with the Expectation Maximization (EM) algorithm to maximize the likelihood that the area over each Gaussian component contains only samples of the same class. The number of target clusters (k) is passes as a hyper-parameter to the learner. In this case, we already know that the number of clusters should be 10 since we generated 10 color blobs.
 
 ```php
 use Rubix\ML\Clusterers\GaussianMixture;
@@ -64,27 +66,33 @@ use Rubix\ML\Clusterers\GaussianMixture;
 $estimator = new GaussianMixture(10);
 ```
 
-Once our estimator is instantiated we can call `train()` passing in the training set we generated earlier.
+### Training
+Once the learner is instantiated, call the `train()` method passing in the training set we generated earlier.
 
 ```php
 $estimator->train($training);
 ```
 
-Lastly to test the model, let's create a report that compares the clustering to some ground truth given by the labels we've assigned to each Blob. A [Contingency Table](https://docs.rubixml.com/en/latest/cross-validation/reports/contingency-table.html) is a clustering report similar to a [Confusion Matrix](https://docs.rubixml.com/en/latest/cross-validation/reports/confusion-matrix.html). It counts the number of times a particular label was assigned to a cluster. A good clustering will show that each cluster contains samples with roughly the same label.
+### Inference
+To make the predictions, pass the testing set to the `predict()` method on the estimator instance. 
+```php
+$predictions = $estimator->predict($testing);
+```
 
-We'll need the predictions made by the Gaussian Mixture clusterer as well as the labels from the testing set to pass to the Contingency Table report's `generate()` method. Once that's done, we'll save the output to a JSON file so we can review it later.
+### Cross Validation
+Lastly, to test the model, we'll create a report that compares the predictions to some ground truth given by the labels we've assigned. A [Contingency Table](https://docs.rubixml.com/en/latest/cross-validation/reports/contingency-table.html) is a clustering report similar to a [Confusion Matrix](https://docs.rubixml.com/en/latest/cross-validation/reports/confusion-matrix.html) but for clustering instead of classification. It counts the number of times a particular cluster was assigned to a given label. A good clustering should show that each cluster contains samples with roughly the same label.
+
+We'll need the predictions made earlier as well as the labels from the testing set to pass to the report's `generate()` method. Then, we'll save the output to a JSON file so we can review it later.
 
 ```php
 use Rubix\ML\CrossValidation\Reports\ContingencyTable;
-
-$predictions = $estimator->predict($testing);
 
 $report = new ContingencyTable();
 
 $results = $report->generate($predictions, $testing->labels());
 ```
 
-Here is an example of a cluster that contains a misclustered magenta point with the reds.
+Here is an excerpt of a Contingency Report that demonstrates a misclustered magenta point within the red cluster.
 
 ```json
 {
@@ -103,15 +111,12 @@ Here is an example of a cluster that contains a misclustered magenta point with 
 }
 ```
 
-To run the training script from the project root:
-```sh
-$ php train.php
-```
-
 ### Wrap Up
-
-- Clustering is a type of *unsupervised* learning which aims at predicting the cluster label of a sample
-- A Guassian Mixture model is a type of clusterer
+- Clustering is a type of unsupervised learning which aims at finding samples which are simila to each other
 - Synthetic data can be used as a way to test models or augment small datasets
-- Rubix Generators are used to generate synthetic data in various shapes and dimensionalities
-- A Contingnecy Table is a report that allows you to evaluate a clustering
+- Generators are used to generate synthetic data in various shapes and dimensionalities
+- A Guassian Mixture model is a type of probabilistic clusterer
+- A Contingnecy Table is a report that allows you to evaluate a clusterer's generalization performance
+
+### Next Steps
+Try generating some more data in other shapes such a [Circle](https://docs.rubixml.com/en/latest/datasets/generators/circle.html) or [Half Moon](https://docs.rubixml.com/en/latest/datasets/generators/half-moon.html). See if Gaussian Mixture is able to detect clusters of different shapes and sizes.

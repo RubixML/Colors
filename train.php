@@ -8,8 +8,6 @@ use Rubix\ML\Clusterers\GaussianMixture;
 use Rubix\ML\Datasets\Generators\Agglomerate;
 use Rubix\ML\CrossValidation\Reports\ContingencyTable;
 
-const REPORT_FILE = 'report.json';
-
 echo '╔═══════════════════════════════════════════════════════════════╗' . PHP_EOL;
 echo '║                                                               ║' . PHP_EOL;
 echo '║ Color Clusterer using Gaussian Mixture                        ║' . PHP_EOL;
@@ -44,6 +42,6 @@ $report = new ContingencyTable();
 
 $results = $report->generate($predictions, $testing->labels());
 
-file_put_contents(REPORT_FILE, json_encode($results, JSON_PRETTY_PRINT));
+file_put_contents('report.json', json_encode($results, JSON_PRETTY_PRINT));
 
-echo 'Report saved to ' . REPORT_FILE . PHP_EOL;
+echo 'Report saved to report.json' . PHP_EOL;
