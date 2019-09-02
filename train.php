@@ -2,15 +2,16 @@
 
 include __DIR__ . '/vendor/autoload.php';
 
+use Rubix\ML\Clusterers\KMeans;
 use Rubix\ML\Other\Loggers\Screen;
 use Rubix\ML\Datasets\Generators\Blob;
-use Rubix\ML\Clusterers\GaussianMixture;
 use Rubix\ML\Datasets\Generators\Agglomerate;
 use Rubix\ML\CrossValidation\Reports\ContingencyTable;
+use League\Csv\Writer;
 
 echo '╔═══════════════════════════════════════════════════════════════╗' . PHP_EOL;
 echo '║                                                               ║' . PHP_EOL;
-echo '║ Color Clusterer using Gaussian Mixture                        ║' . PHP_EOL;
+echo '║ Color Clusterer using K Means                                 ║' . PHP_EOL;
 echo '║                                                               ║' . PHP_EOL;
 echo '╚═══════════════════════════════════════════════════════════════╝' . PHP_EOL;
 echo PHP_EOL;
@@ -30,11 +31,19 @@ $generator = new Agglomerate([
 
 [$training, $testing] = $generator->generate(5000)->stratifiedSplit(0.8);
 
-$estimator = new GaussianMixture(10);
+$estimator = new KMeans(10);
 
 $estimator->setLogger(new Screen('colors'));
 
 $estimator->train($training);
+
+$losses = $estimator->steps();
+
+$writer = Writer::createFromPath('progress.csv', 'w+');
+$writer->insertOne(['loss']);
+$writer->insertAll(array_map(null, $losses, []));
+
+echo 'Progress saved to progress.csv' . PHP_EOL;
 
 $predictions = $estimator->predict($testing);
 

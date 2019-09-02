@@ -1,9 +1,9 @@
 # Color Clusterer
-An unsupervised learning problem that involves clustering 10 different base colors generated on the fly using Rubix ML [Generators](https://docs.rubixml.com/en/latest/datasets/generators/api.html). Our objective is to generate a synthetic training and testing set that we'll use to train and test a [Gaussian Mixture](https://docs.rubixml.com/en/latest/clusterers/gaussian-mixture.html) clusterer.
+An unsupervised learning problem that involves clustering 10 different base colors generated on the fly using Rubix ML [Generators](https://docs.rubixml.com/en/latest/datasets/generators/api.html). Our objective is to generate a synthetic training and testing set that we'll use to train and test a [K Means](https://docs.rubixml.com/en/latest/clusterers/k-means.html) clusterer.
 
 - **Difficulty**: Easy
-- **Training time**: < 1 Minute
-- **Memory needed**: < 1G
+- **Training time**: Seconds
+- **Memory needed**: 1G
 
 ## Installation
 Clone the repository locally using [Git](https://git-scm.com/):
@@ -22,12 +22,12 @@ $ composer install
 ## Tutorial
 
 ### Introduction
-In machine learning, synthetic data are often used to test an estimator and to augment a small dataset with more training data. In this tutorial we'll use synthetic data to train and test a Gaussian Mixture Model (GMM) to determine the color of a sample.
+In machine learning, synthetic data are often used to test an estimator and to augment a small dataset with more training data. In this tutorial we'll use synthetic data to train and test a K Means clusterer to group samples by their color.
 
 > **Note:** The source code for this example can be found in the [train.php](https://github.com/RubixML/Colors/blob/master/train.php) file in project root.
 
 ### Generating the Data
-Rubix ML provides a number of [Generators](https://docs.rubixml.com/en/latest/datasets/generators/api.html) which can output a dataset in a particular shape and dimensionality. For this example project, we are going to generate [Blobs](https://docs.rubixml.com/en/latest/datasets/generators/blob.html) of colors using their red, green, and blue (RGB) values as the features. The [Agglomerate](https://docs.rubixml.com/en/latest/datasets/generators/agglomerate.html) generator will combine and label the individual color generators to form a dataset consisting of all 10 colors.
+Rubix ML provides a number of [Generators](https://docs.rubixml.com/en/latest/datasets/generators/api.html) which can output a dataset in a particular shape and dimensionality. For this example project, we are going to generate [Blobs](https://docs.rubixml.com/en/latest/datasets/generators/blob.html) of colors using their red, green, and blue (RGB) values as the features. The [Agglomerate](https://docs.rubixml.com/en/latest/datasets/generators/agglomerate.html) generator will combine and label the individual color generators to form a [Labeled](https://docs.rubixml.com/en/latest/datasets/labeled.html) dataset consisting of all 10 colors.
 
 ```php
 use Rubix\ML\Datasets\Generators\Agglomerate;
@@ -58,12 +58,12 @@ Now let's take a look at the data we've generated using some plotting software s
 ![Synthetic Color Data](https://github.com/RubixML/Colors/blob/master/docs/images/samples-3d.png)
 
 ### Instantiating the Learner
-Next we'll define our [Gaussian Mixture](https://docs.rubixml.com/en/latest/clusterers/gaussian-mixture.html) clusterer. Gaussian Mixture Models (GMMs) are a type of probabilistic model for finding subpopulations within a dataset. GMM places a Gaussian *component* over each target cluster that allows a likelihood function to be computed. The learner is then trained with the Expectation Maximization (EM) algorithm to maximize the likelihood that the area over each Gaussian component contains only samples of the same class. The number of target clusters (k) is passes as a hyper-parameter to the learner. In this case, we already know that the number of clusters should be 10 since we generated 10 color blobs.
+Next we'll define our [K Means](https://docs.rubixml.com/en/latest/clusterers/k-means.html) clusterer. K Means is a fast centroid-based online clustering algorithm that minimizes the inertia cost function using Mini Batch Gradient Descent. The algorithm finds a set of k cluster centroids or multivariate *means* of the cluster. The number of target clusters (k) is passes as a hyper-parameter to the learner. In this case, we already know that the number of clusters should be 10 since we generated 10 color blobs.
 
 ```php
-use Rubix\ML\Clusterers\GaussianMixture;
+use Rubix\ML\Clusterers\KMeans;
 
-$estimator = new GaussianMixture(10);
+$estimator = new KMeans(10);
 ```
 
 ### Training
@@ -72,6 +72,17 @@ Once the learner is instantiated, call the `train()` method passing in the train
 ```php
 $estimator->train($training);
 ```
+
+### Training Loss
+K Means uses the inertia cost function to measure the goodness of fit of the k centroids. We can visualize the training progress by plotting the values of the cost function at each epoch. To obtain the training losses call the `steps()` method.
+
+```php
+$losses = $estimator->steps();
+```
+
+Then, plot the values using your favorite plotting software. As you can see, the value of the cost function decreases at each epoch of training until it eventually stops when K Means meets its stopping criteria.
+
+![Inertia Loss](https://raw.githubusercontent.com/RubixML/Colors/master/docs/images/training-loss.svg?sanitize=true)
 
 ### Inference
 To make the predictions, pass the testing set to the `predict()` method on the estimator instance. 
@@ -111,12 +122,14 @@ Here is an excerpt of a Contingency Report that demonstrates a misclustered mage
 }
 ```
 
+> **Note:** Due to the stochastic nature of the K Means algorithm, each clustering will be different. If a a clustering is poor, just try retraining.
+
 ### Wrap Up
 - Clustering is a type of unsupervised learning which aims at finding samples which are simila to each other
 - Synthetic data can be used as a way to test models or augment small datasets
 - Generators are used to generate synthetic data in various shapes and dimensionalities
-- A Guassian Mixture model is a type of probabilistic clusterer
+- K Means is a scalable algorithm capable of handling lots of data
 - A Contingnecy Table is a report that allows you to evaluate a clusterer's generalization performance
 
 ### Next Steps
-Try generating some more data in other shapes such a [Circle](https://docs.rubixml.com/en/latest/datasets/generators/circle.html) or [Half Moon](https://docs.rubixml.com/en/latest/datasets/generators/half-moon.html). See if Gaussian Mixture is able to detect clusters of different shapes and sizes.
+Try generating some more data in other shapes such a [Circle](https://docs.rubixml.com/en/latest/datasets/generators/circle.html) or [Half Moon](https://docs.rubixml.com/en/latest/datasets/generators/half-moon.html). Is K Means is able to detect clusters of different shapes and sizes?
