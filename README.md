@@ -122,14 +122,14 @@ Here is an excerpt of a Contingency Report that demonstrates a misclustered mage
 }
 ```
 
-> **Note:** Due to the stochastic nature of the K Means algorithm, each clustering will be different. If a a clustering is poor, just try retraining.
+> **Note:** Due to the stochastic nature of the K Means algorithm, each clustering will be different. If a clustering is poor, just try retraining.
 
 ### Wrap Up
-- Clustering is a type of unsupervised learning which aims at finding samples which are simila to each other
-- Synthetic data can be used as a way to test models or augment small datasets
-- Generators are used to generate synthetic data in various shapes and dimensionalities
-- K Means is a scalable algorithm capable of handling lots of data
-- A Contingnecy Table is a report that allows you to evaluate a clusterer's generalization performance
+- Clustering is a type of unsupervised learning which aims at finding samples that are similar to each other.
+- Synthetic data can be used as a way to test models or augment small datasets.
+- In Rubix ML, Generators are used to generate synthetic data in various shapes and dimensionalities.
+- K Means is a scalable clustering algorithm capable of handling lots of data.
+- A Contingnecy Table is a report that allows you to evaluate a clusterer's generalization performance.
 
 ### Next Steps
 Try generating some more data in other shapes such a [Circle](https://docs.rubixml.com/en/latest/datasets/generators/circle.html) or [Half Moon](https://docs.rubixml.com/en/latest/datasets/generators/half-moon.html). Is K Means is able to detect clusters of different shapes and sizes?
