@@ -2,19 +2,16 @@
 
 include __DIR__ . '/vendor/autoload.php';
 
-use Rubix\ML\Clusterers\KMeans;
-use Rubix\ML\Other\Loggers\Screen;
 use Rubix\ML\Datasets\Generators\Blob;
 use Rubix\ML\Datasets\Generators\Agglomerate;
+use Rubix\ML\Clusterers\KMeans;
+use Rubix\ML\Other\Loggers\Screen;
 use Rubix\ML\CrossValidation\Reports\ContingencyTable;
 use League\Csv\Writer;
 
-echo '╔═══════════════════════════════════════════════════════════════╗' . PHP_EOL;
-echo '║                                                               ║' . PHP_EOL;
-echo '║ Color Clusterer using K Means                                 ║' . PHP_EOL;
-echo '║                                                               ║' . PHP_EOL;
-echo '╚═══════════════════════════════════════════════════════════════╝' . PHP_EOL;
-echo PHP_EOL;
+use function Rubix\ML\array_transpose;
+
+ini_set('memory_limit', '-1');
 
 $generator = new Agglomerate([
     'red' => new Blob([255, 0, 0], 20.),
@@ -41,7 +38,7 @@ $losses = $estimator->steps();
 
 $writer = Writer::createFromPath('progress.csv', 'w+');
 $writer->insertOne(['loss']);
-$writer->insertAll(array_map(null, $losses, []));
+$writer->insertAll(array_transpose([$losses]));
 
 echo 'Progress saved to progress.csv' . PHP_EOL;
 

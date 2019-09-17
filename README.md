@@ -1,4 +1,4 @@
-# Color Clusterer
+# Rubix ML - Color Clusterer
 An unsupervised learning problem that involves clustering 10 different base colors generated on the fly using Rubix ML [Generators](https://docs.rubixml.com/en/latest/datasets/generators/api.html). Our objective is to generate a synthetic training and testing set that we'll use to train and test a [K Means](https://docs.rubixml.com/en/latest/clusterers/k-means.html) clusterer.
 
 - **Difficulty**: Easy
@@ -129,7 +129,7 @@ Here is an excerpt of a Contingency Report that demonstrates a misclustered mage
 - Synthetic data can be used as a way to test models or augment small datasets.
 - In Rubix ML, Generators are used to generate synthetic data in various shapes and dimensionalities.
 - K Means is a scalable clustering algorithm capable of handling lots of data.
-- A Contingnecy Table is a report that allows you to evaluate a clusterer's generalization performance.
+- A Contingency Table is a report that allows us to evaluate a clusterer's generalization performance.
 
 ### Next Steps
 Try generating some more data in other shapes such a [Circle](https://docs.rubixml.com/en/latest/datasets/generators/circle.html) or [Half Moon](https://docs.rubixml.com/en/latest/datasets/generators/half-moon.html). Is K Means is able to detect clusters of different shapes and sizes?
