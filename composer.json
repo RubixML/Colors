@@ -1,7 +1,7 @@
 {
     "name": "rubix/colors",
     "type": "project",
-    "description": "An example project demonstrating unsupervised learning with the K Means clusterer and synthetic color data using Generators.",
+    "description": "Demonstrating unsupervised learning using the K Means clusterer and synthetic color data.",
     "homepage": "https://github.com/RubixML/Colors",
     "license": "MIT",
     "keywords": [

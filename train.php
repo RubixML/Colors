@@ -32,6 +32,8 @@ $estimator = new KMeans(10);
 
 $estimator->setLogger(new Screen('colors'));
 
+echo 'Training ...' . PHP_EOL;
+
 $estimator->train($training);
 
 $losses = $estimator->steps();
@@ -41,6 +43,8 @@ $writer->insertOne(['loss']);
 $writer->insertAll(array_transpose([$losses]));
 
 echo 'Progress saved to progress.csv' . PHP_EOL;
+
+echo 'Making predictions ...' . PHP_EOL;
 
 $predictions = $estimator->predict($testing);
 
