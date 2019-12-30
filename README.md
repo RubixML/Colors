@@ -17,7 +17,7 @@ $ composer install
 ```
 
 ## Requirements
-- [PHP](https://php.net) 7.1.3 or above
+- [PHP](https://php.net) 7.2 or above
 
 ## Tutorial
 
@@ -124,4 +124,4 @@ Here is an excerpt of the Contingency Report. You'll notice a misclustered magen
 > **Note:** Due to the stochastic nature of the K Means algorithm, each clustering will be a little different. If a particular clustering is poor, you can try retraining the learner.
 
 ### Next Steps
-Congratualtions on completing the tutorial on K Means and synthetic data generation. Try generating some more data in other shapes using the [Circle](https://docs.rubixml.com/en/latest/datasets/generators/circle.html) or [Half Moon](https://docs.rubixml.com/en/latest/datasets/generators/half-moon.html) generator. Is K Means able to detect clusters of different shapes and sizes?
+Congratulations on completing the tutorial on K Means and synthetic data generation. Try generating some more data in other shapes using the [Circle](https://docs.rubixml.com/en/latest/datasets/generators/circle.html) or [Half Moon](https://docs.rubixml.com/en/latest/datasets/generators/half-moon.html) generator. Is K Means able to detect clusters of different shapes and sizes?
