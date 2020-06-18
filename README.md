@@ -3,7 +3,9 @@ The K Means algorithm is a popular unsupervised learner for clustering samples. 
 
 - **Difficulty**: Easy
 - **Training time**: Less than a minute
-- **Memory needed**: 1G
+
+## Requirements
+- [PHP](https://php.net) 7.2 or above
 
 ## Installation
 Clone the repository locally using [Git](https://git-scm.com/):
@@ -15,9 +17,6 @@ Install dependencies using [Composer](https://getcomposer.org/):
 ```sh
 $ composer install
 ```
-
-## Requirements
-- [PHP](https://php.net) 7.2 or above
 
 ## Tutorial
 
@@ -34,16 +33,16 @@ use Rubix\ML\Datasets\Generators\Agglomerate;
 use Rubix\ML\Datasets\Generators\Blob;
 
 $generator = new Agglomerate([
-    'red' => new Blob([255, 0, 0], 20.),
-    'orange' => new Blob([255, 128, 0], 20.),
-    'yellow' => new Blob([255, 255, 0], 20.),
-    'green' => new Blob([0, 128, 0], 20.),
-    'blue' => new Blob([0, 0, 255], 20.),
-    'aqua' => new Blob([0, 255, 255], 20.),
-    'purple' => new Blob([128, 0, 255], 20.),
-    'pink' => new Blob([255, 0, 255], 20.),
-    'magenta' => new Blob([255, 0, 128], 20.),
-    'black' => new Blob([0, 0, 0], 20.),
+    'red' => new Blob([255, 0, 0], 20.0),
+    'orange' => new Blob([255, 128, 0], 20.0),
+    'yellow' => new Blob([255, 255, 0], 20.0),
+    'green' => new Blob([0, 128, 0], 20.0),
+    'blue' => new Blob([0, 0, 255], 20.0),
+    'aqua' => new Blob([0, 255, 255], 20.0),
+    'purple' => new Blob([128, 0, 255], 20.0),
+    'pink' => new Blob([255, 0, 255], 20.0),
+    'magenta' => new Blob([255, 0, 128], 20.0),
+    'black' => new Blob([0, 0, 0], 20.0),
 ]);
 ```
 
@@ -125,3 +124,6 @@ Here is an excerpt of the Contingency Report. You'll notice a misclustered magen
 
 ### Next Steps
 Congratulations on completing the tutorial on K Means and synthetic data generation. Try generating some more data in other shapes using the [Circle](https://docs.rubixml.com/en/latest/datasets/generators/circle.html) or [Half Moon](https://docs.rubixml.com/en/latest/datasets/generators/half-moon.html) generator. Is K Means able to detect clusters of different shapes and sizes?
+
+## License
+The code is licensed [Apache 2.0](LICENSE.md) and the tutorial is licensed [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/).

@@ -1,12 +1,14 @@
 {
     "name": "rubix/colors",
     "type": "project",
-    "description": "Demonstrating unsupervised learning using the K Means clusterer and synthetic color data.",
+    "description": "Demonstrating unsupervised clustering using the K Means algorithm and synthetic color data.",
     "homepage": "https://github.com/RubixML/Colors",
-    "license": "MIT",
+    "license": "Apache-2.0",
+    "readme": "README.md",
     "keywords": [
-        "php", "machine", "learning", "data", "science", "mining", "predictive", "modeling",
-        "ai", "clustering", "synthetic", "k-means", "contingency-table"
+        "clustering", "clusterer", "color clustering", "contingency table", "cross validation",
+        "dataset", "data science", "example project", "k means", "k-means", "machine learning",
+        "ml", "php", "php ml", "rubix ml", "rubixml", "synthetic data", "tutorial"
     ],
     "authors": [
         {
