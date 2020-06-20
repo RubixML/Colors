@@ -4,19 +4,14 @@ The K Means algorithm is a popular unsupervised learner for clustering samples. 
 - **Difficulty**: Easy
 - **Training time**: Less than a minute
 
+## Installation
+Clone the project locally using [Composer](https://getcomposer.org/):
+```sh
+$ composer create-project rubix/colors
+```
+
 ## Requirements
 - [PHP](https://php.net) 7.2 or above
-
-## Installation
-Clone the repository locally using [Git](https://git-scm.com/):
-```sh
-$ git clone https://github.com/RubixML/Colors
-```
-
-Install dependencies using [Composer](https://getcomposer.org/):
-```sh
-$ composer install
-```
 
 ## Tutorial
 
@@ -34,15 +29,15 @@ use Rubix\ML\Datasets\Generators\Blob;
 
 $generator = new Agglomerate([
     'red' => new Blob([255, 0, 0], 20.0),
-    'orange' => new Blob([255, 128, 0], 20.0),
-    'yellow' => new Blob([255, 255, 0], 20.0),
+    'orange' => new Blob([255, 128, 0], 10.0),
+    'yellow' => new Blob([255, 255, 0], 10.0),
     'green' => new Blob([0, 128, 0], 20.0),
     'blue' => new Blob([0, 0, 255], 20.0),
-    'aqua' => new Blob([0, 255, 255], 20.0),
-    'purple' => new Blob([128, 0, 255], 20.0),
-    'pink' => new Blob([255, 0, 255], 20.0),
-    'magenta' => new Blob([255, 0, 128], 20.0),
-    'black' => new Blob([0, 0, 0], 20.0),
+    'aqua' => new Blob([0, 255, 255], 10.0),
+    'purple' => new Blob([128, 0, 255], 10.0),
+    'pink' => new Blob([255, 0, 255], 10.0),
+    'magenta' => new Blob([255, 0, 128], 10.0),
+    'black' => new Blob([0, 0, 0], 10.0),
 ]);
 ```
 
@@ -99,6 +94,11 @@ use Rubix\ML\CrossValidation\Reports\ContingencyTable;
 $report = new ContingencyTable();
 
 $results = $report->generate($predictions, $testing->labels());
+```
+
+Now we're ready to run the training and validation script from the command line.
+```php
+$ php train.php
 ```
 
 Here is an excerpt of the Contingency Report. You'll notice a misclustered magenta point within the red cluster. Not bad, nice work!
