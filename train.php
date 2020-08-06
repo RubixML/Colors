@@ -8,7 +8,7 @@ use Rubix\ML\Clusterers\KMeans;
 use Rubix\ML\Other\Loggers\Screen;
 use Rubix\ML\CrossValidation\Reports\ContingencyTable;
 use Rubix\ML\CrossValidation\Metrics\Homogeneity;
-use League\Csv\Writer;
+use Rubix\ML\Datasets\Unlabeled;
 
 use function Rubix\ML\array_transpose;
 
@@ -31,7 +31,7 @@ $generator = new Agglomerate([
 
 $estimator = new KMeans(10);
 
-$estimator->setLogger(new Screen('colors'));
+$estimator->setLogger(new Screen());
 
 echo 'Training ...' . PHP_EOL;
 
@@ -39,10 +39,9 @@ $estimator->train($training);
 
 $losses = $estimator->steps();
 
-$writer = Writer::createFromPath('progress.csv', 'w+');
-
-$writer->insertOne(['loss']);
-$writer->insertAll(array_transpose([$losses]));
+Unlabeled::build(array_transpose([$losses]))
+    ->toCSV(['losses'])
+    ->write('progress.csv');
 
 echo 'Progress saved to progress.csv' . PHP_EOL;
 
@@ -54,7 +53,9 @@ $report = new ContingencyTable();
 
 $results = $report->generate($predictions, $testing->labels());
 
-file_put_contents('report.json', json_encode($results, JSON_PRETTY_PRINT));
+echo $results;
+
+$results->toJSON()->write('report.json');
 
 echo 'Report saved to report.json' . PHP_EOL;
 
