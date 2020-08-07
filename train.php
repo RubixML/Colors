@@ -14,6 +14,8 @@ use function Rubix\ML\array_transpose;
 
 ini_set('memory_limit', '-1');
 
+$logger = new Screen();
+
 $generator = new Agglomerate([
     'red' => new Blob([255, 0, 0], 20.0),
     'orange' => new Blob([255, 128, 0], 10.0),
@@ -27,13 +29,13 @@ $generator = new Agglomerate([
     'black' => new Blob([0, 0, 0], 10.0),
 ]);
 
+$logger->info('Generating dataset');
+
 [$training, $testing] = $generator->generate(5000)->stratifiedSplit(0.8);
 
 $estimator = new KMeans(10);
 
-$estimator->setLogger(new Screen());
-
-echo 'Training ...' . PHP_EOL;
+$estimator->setLogger($logger);
 
 $estimator->train($training);
 
@@ -43,9 +45,9 @@ Unlabeled::build(array_transpose([$losses]))
     ->toCSV(['losses'])
     ->write('progress.csv');
 
-echo 'Progress saved to progress.csv' . PHP_EOL;
+$logger->info('Progress saved to progress.csv');
 
-echo 'Making predictions ...' . PHP_EOL;
+$logger->info('Making predictions');
 
 $predictions = $estimator->predict($testing);
 
@@ -57,10 +59,10 @@ echo $results;
 
 $results->toJSON()->write('report.json');
 
-echo 'Report saved to report.json' . PHP_EOL;
+$logger->info('Report saved to report.json');
 
 $metric = new Homogeneity();
 
 $score = $metric->score($predictions, $testing->labels());
 
-echo 'Clusters are ' . (string) round($score * 100.0, 2) . '% homogenous' . PHP_EOL;
+$logger->info('Clusters are ' . (string) round($score * 100.0, 2) . '% homogenous');
