@@ -3,7 +3,7 @@
     "type": "project",
     "description": "Demonstrating unsupervised clustering using the K Means algorithm and synthetic color data.",
     "homepage": "https://github.com/RubixML/Colors",
-    "license": "Apache-2.0",
+    "license": "MIT",
     "readme": "README.md",
     "keywords": [
         "clustering", "clusterer", "color clustering", "contingency table", "cross validation",
@@ -13,14 +13,13 @@
     "authors": [
         {
             "name": "Andrew DalPino",
-            "email": "me@andrewdalpino.com",
-            "homepage": "https://andrewdalpino.com",
+            "homepage": "https://github.com/andrewdalpino",
             "role": "Lead Engineer"
         }
     ],
     "require": {
         "php": ">=7.2",
-        "rubix/ml": "^0.1.0"
+        "rubix/ml": "^0.3.0"
     },
     "scripts": {
         "train": "@php train.php"

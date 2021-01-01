@@ -76,7 +76,7 @@ $losses = $estimator->steps();
 
 Now, we can plot the values using our favorite plotting software. As you can see, the value of the cost function decreases at each epoch until it stops when K Means has met its stopping criteria.
 
-![Inertia Loss](https://raw.githubusercontent.com/RubixML/Colors/master/docs/images/training-loss.svg?sanitize=true)
+![Inertia Loss](https://raw.githubusercontent.com/RubixML/Colors/master/docs/images/training-loss.png)
 
 ### Making Predictions
 To make the predictions, pass the testing set to the `predict()` method on the estimator instance.
@@ -126,4 +126,4 @@ Here is an excerpt of the Contingency Report. You'll notice a misclustered magen
 Congratulations on completing the tutorial on K Means and synthetic data generation. Try generating some more data in other shapes using the [Circle](https://docs.rubixml.com/en/latest/datasets/generators/circle.html) or [Half Moon](https://docs.rubixml.com/en/latest/datasets/generators/half-moon.html) generator. Is K Means able to detect clusters of different shapes and sizes?
 
 ## License
-The code is licensed [MIT](LICENSE.md) and the tutorial is licensed [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/).
+The code is licensed [MIT](LICENSE) and the tutorial is licensed [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/).
