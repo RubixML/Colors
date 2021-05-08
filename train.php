@@ -2,15 +2,15 @@
 
 include __DIR__ . '/vendor/autoload.php';
 
+use Rubix\ML\Loggers\Screen;
 use Rubix\ML\Datasets\Generators\Agglomerate;
 use Rubix\ML\Datasets\Generators\Blob;
 use Rubix\ML\Clusterers\KMeans;
-use Rubix\ML\Other\Loggers\Screen;
+use Rubix\ML\Extractors\CSV;
 use Rubix\ML\CrossValidation\Reports\ContingencyTable;
+use Rubix\ML\Persisters\Filesystem;
 use Rubix\ML\CrossValidation\Metrics\Homogeneity;
 use Rubix\ML\Datasets\Unlabeled;
-
-use function Rubix\ML\array_transpose;
 
 ini_set('memory_limit', '-1');
 
@@ -39,11 +39,9 @@ $estimator->setLogger($logger);
 
 $estimator->train($training);
 
-$losses = $estimator->steps();
+$extractor = new CSV('progress.csv', true);
 
-Unlabeled::build(array_transpose([$losses]))
-    ->toCSV(['losses'])
-    ->write('progress.csv');
+$extractor->export($estimator->steps());
 
 $logger->info('Progress saved to progress.csv');
 
@@ -57,7 +55,7 @@ $results = $report->generate($predictions, $testing->labels());
 
 echo $results;
 
-$results->toJSON()->write('report.json');
+$results->toJSON()->saveTo(new Filesystem('report.json'));
 
 $logger->info('Report saved to report.json');
 

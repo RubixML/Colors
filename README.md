@@ -68,10 +68,14 @@ $estimator->train($training);
 ```
 
 ### Training Loss
-K Means uses the inertia cost function to measure the goodness of fit of each of the k centroids. We can visualize the training progress by plotting the values of the cost function at each epoch. To obtain the training losses call the `steps()` method on the estimator.
+K Means uses the inertia cost function to measure the goodness of fit of each of the k centroids. We can visualize the training progress by plotting the values of the cost function at each epoch. To obtain the training losses call the `steps()` method on the estimator. To save the progress to a file we can pass the iterator returned by the `steps()` method to the `export()` method of a [Writable](https://docs.rubixml.com/latest/extractors/api.html) extractor.
 
 ```php
-$losses = $estimator->steps();
+use Rubix\ML\Extractors\CSV;
+
+$extractor = new CSV('progress.csv', true);
+
+$extractor->export($estimator->steps());
 ```
 
 Now, we can plot the values using our favorite plotting software. As you can see, the value of the cost function decreases at each epoch until it stops when K Means has met its stopping criteria.
