@@ -10,7 +10,6 @@ use Rubix\ML\Extractors\CSV;
 use Rubix\ML\CrossValidation\Reports\ContingencyTable;
 use Rubix\ML\Persisters\Filesystem;
 use Rubix\ML\CrossValidation\Metrics\Homogeneity;
-use Rubix\ML\Datasets\Unlabeled;
 
 ini_set('memory_limit', '-1');
 
