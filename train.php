@@ -40,7 +40,7 @@ $estimator->train($training);
 
 $extractor = new CSV('progress.csv', true);
 
-$extractor->export($estimator->steps());
+$extractor->export($estimator->progress(), overwrite: true);
 
 $logger->info('Progress saved to progress.csv');
 
