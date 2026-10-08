@@ -9,7 +9,7 @@ use Rubix\ML\Clusterers\KMeans;
 use Rubix\ML\Extractors\CSV;
 use Rubix\ML\CrossValidation\Reports\ContingencyTable;
 use Rubix\ML\Persisters\Filesystem;
-use Rubix\ML\CrossValidation\Metrics\Homogeneity;
+use Rubix\ML\CrossValidation\Metrics\VMeasure;
 
 ini_set('memory_limit', '-1');
 
@@ -40,7 +40,7 @@ $estimator->train($training);
 
 $extractor = new CSV('progress.csv', true);
 
-$extractor->export($estimator->steps());
+$extractor->export($estimator->progress(), overwrite: true);
 
 $logger->info('Progress saved to progress.csv');
 
@@ -58,8 +58,8 @@ $results->toJSON()->saveTo(new Filesystem('report.json'));
 
 $logger->info('Report saved to report.json');
 
-$metric = new Homogeneity();
+$metric = new VMeasure();
 
 $score = $metric->score($predictions, $testing->labels());
 
-$logger->info('Clusters are ' . (string) round($score * 100.0, 2) . '% homogenous');
+$logger->info("Clusters have a V-Measure score of {$score}");
